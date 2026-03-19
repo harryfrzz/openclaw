@@ -1388,6 +1388,12 @@ export const FIELD_HELP: Record<string, string> = {
     "xAI voice ID used for synthesis (for example eve, ara, rex, sal, leo). Defaults to eve when unset.",
   "messages.tts.xai.speed":
     "Playback speed multiplier for xAI TTS synthesis (0.25–4.0, default 1.0).",
+  "messages.tts.xai.language":
+    "BCP-47 language tag for xAI TTS synthesis (e.g. en, zh-CN, es). Leave unset to use the model's default language detection.",
+  "messages.tts.xai.outputFormat":
+    "Audio output format for xAI TTS. Options: mp3 (default), wav, pcm, g711_alaw, g711_ulaw. Use pcm for voice notes.",
+  "messages.tts.xai.sampleRate":
+    "Audio sample rate in Hz for xAI TTS synthesis (8000–48000, default 24000). Only applies when outputFormat is set to a compressed format like mp3 or wav.",
   channels:
     "Channel provider configurations plus shared defaults that control access policies, heartbeat visibility, and per-surface behavior. Keep defaults centralized and override per provider only where required.",
   "channels.telegram":

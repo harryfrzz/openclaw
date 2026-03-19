@@ -74,6 +74,12 @@ export type TtsConfig = {
     voice?: string;
     /** Playback speed (0.25–4.0, default 1.0). */
     speed?: number;
+    /** BCP-47 language tag for synthesis (e.g. en, zh-CN, es). */
+    language?: string;
+    /** Audio output format. Defaults to mp3. */
+    outputFormat?: "mp3" | "wav" | "pcm" | "g711_alaw" | "g711_ulaw";
+    /** Sample rate in Hz (8000–48000). Defaults to 24000. */
+    sampleRate?: number;
   };
   /** Legacy alias for Microsoft speech configuration. */
   edge?: {

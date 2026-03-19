@@ -13,9 +13,11 @@ async function xaiTTS(params: {
   language?: string;
   speed?: number;
   outputFormat: XaiTtsOutputFormat;
+  sampleRate?: number;
   timeoutMs: number;
 }): Promise<Buffer> {
-  const { text, apiKey, baseUrl, voice, language, speed, outputFormat, timeoutMs } = params;
+  const { text, apiKey, baseUrl, voice, language, speed, outputFormat, sampleRate, timeoutMs } =
+    params;
 
   if (!isValidXaiVoice(voice)) {
     throw new Error(`Invalid xAI TTS voice: ${voice}. Valid voices: ${XAI_TTS_VOICES.join(", ")}`);
@@ -37,6 +39,7 @@ async function xaiTTS(params: {
         ...(language && { language_I10x: language }),
         ...(speed != null && { speed }),
         output_format: outputFormat,
+        ...(sampleRate != null && { sample_rate: sampleRate }),
       }),
       signal: controller.signal,
     });
@@ -79,14 +82,17 @@ export function buildXaiSpeechProvider(): SpeechProviderPlugin {
         throw new Error("xAI API key missing");
       }
       const baseUrl = (req.config.xai.baseUrl || DEFAULT_XAI_BASE_URL).replace(/\/+$/, "");
-      const outputFormat: XaiTtsOutputFormat = req.target === "voice-note" ? "pcm" : "mp3";
+      const outputFormat: XaiTtsOutputFormat =
+        req.target === "voice-note" ? "pcm" : (req.config.xai.outputFormat ?? "mp3");
       const audioBuffer = await xaiTTS({
         text: req.text,
         apiKey,
         baseUrl,
         voice: req.overrides?.xai?.voice ?? req.config.xai.voice,
+        language: req.config.xai.language,
         speed: req.config.xai.speed,
         outputFormat,
+        sampleRate: req.config.xai.sampleRate,
         timeoutMs: req.config.timeoutMs,
       });
       return {
@@ -103,14 +109,16 @@ export function buildXaiSpeechProvider(): SpeechProviderPlugin {
       }
       const baseUrl = (req.config.xai.baseUrl || DEFAULT_XAI_BASE_URL).replace(/\/+$/, "");
       const outputFormat: XaiTtsOutputFormat = "pcm";
-      const sampleRate = 16_000;
+      const sampleRate = req.config.xai.sampleRate ?? 16_000;
       const audioBuffer = await xaiTTS({
         text: req.text,
         apiKey,
         baseUrl,
         voice: req.config.xai.voice,
+        language: req.config.xai.language,
         speed: req.config.xai.speed,
         outputFormat,
+        sampleRate,
         timeoutMs: req.config.timeoutMs,
       });
       return { audioBuffer, outputFormat, sampleRate };

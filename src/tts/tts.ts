@@ -123,6 +123,9 @@ export type ResolvedTtsConfig = {
     model: string;
     voice: string;
     speed?: number;
+    language?: string;
+    outputFormat: "mp3" | "wav" | "pcm" | "g711_alaw" | "g711_ulaw";
+    sampleRate?: number;
   };
   edge: {
     enabled: boolean;
@@ -331,6 +334,9 @@ export function resolveTtsConfig(cfg: OpenClawConfig): ResolvedTtsConfig {
       model: raw.xai?.model ?? "",
       voice: raw.xai?.voice ?? "eve",
       speed: raw.xai?.speed,
+      language: raw.xai?.language?.trim() || undefined,
+      outputFormat: raw.xai?.outputFormat ?? "mp3",
+      sampleRate: raw.xai?.sampleRate,
     },
     edge: {
       enabled: rawMicrosoft.enabled ?? true,
