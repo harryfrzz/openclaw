@@ -186,6 +186,7 @@ export type TtsDirectiveOverrides = {
   xai?: {
     voice?: string;
     model?: string;
+  };
   microsoft?: {
     voice?: string;
     outputFormat?: string;
